@@ -1,18 +1,14 @@
-import sqlalchemy as db
-from sqlalchemy import create_engine
 import pandas as pd
 import sys
 import os
 import sqlite3
 import inspect
-from bdd_sqlite.functions import DataBaseV2
-from stratégie_nettoyage_donnees import nettoyage_df
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 bdd_path = os.path.join(parentdir, "bdd_sqlite", "db.db")
-
+from stratégie_nettoyage_donnees import nettoyage_df
 
 
 def charger_donnees(chemin_bdd):
