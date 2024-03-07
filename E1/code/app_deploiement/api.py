@@ -4,13 +4,7 @@ from pydantic import BaseModel
 import pickle
 from google.cloud import storage
 import os
-from dotenv import load_dotenv
 
-# Charger les variables d'environnement
-load_dotenv()
-
-bucket_name = os.getenv("BUCKET_NAME")
-json_key = os.getenv("JSON_KEY")
 
 def charger_model():
     model_path = r"pipeline_logisticregression0.83f1.pkl"
