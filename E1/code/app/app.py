@@ -1,6 +1,5 @@
 import streamlit as st
 import requests
-from api import app
 
 st.title("Détection de besoin de traitement pour la santé mentale avec l'IA")
 
@@ -159,8 +158,8 @@ if bouton:
     "mental_vs_physical" : mental_vs_physical, 
     "obs_consequence" : obs_consequence}
 
-    response = app.post("/predict", json=input_data_dict)
-    response = requests.post("https://api-isen-g2-06ad6589f9a4.herokuapp.com/predict_loan", json=dict_pred)
-    st.text(response.json()["prediction"])
+    # response = app.post("/predict", json=input_data_dict)
+    # response = requests.post("https://api-isen-g2-06ad6589f9a4.herokuapp.com/predict_loan", json=dict_pred)
+    # st.text(response.json()["prediction"])
 
 

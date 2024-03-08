@@ -1,0 +1,7 @@
+# version: '2.4'
+# services:
+#   streamlit:
+#     container_name: sante_app_container
+#     build:
+#         context: .
+#         dockerfile: Dockerfile

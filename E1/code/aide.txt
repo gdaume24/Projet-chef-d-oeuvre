@@ -1,0 +1,9 @@
+streamlit
+
+docker run --publish 8501:8501 --detach --name santeapp geosanteimage /bin/bash -c "sleep infinity"
+
+truc qui marches
+docker run -d --name santeapp3 -p 8501:8501 -v $(pwd):/streamlit-app geosanteimage3
+
+
+fastapi
