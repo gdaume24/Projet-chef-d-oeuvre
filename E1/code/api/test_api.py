@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
-from app_deploiement.api import app
+from api import app
 
-input_data_dict = {"Age" : 35,
+input_data_dict = {"Age" : "35",
 "Gender" : "Female",
 "self_employed" : "Other",
 "family_history" : "No",

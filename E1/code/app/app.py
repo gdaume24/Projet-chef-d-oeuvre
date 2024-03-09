@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+from translation import translate
 
 st.title("Détection de besoin de traitement pour la santé mentale avec l'IA")
 
@@ -34,7 +35,7 @@ st.write("##")
 
 # Question no_employees
 st.write("Combien d'employés votre entreprise ou organisation possède-t-elle ?")
-no_employees = st.radio("5", ["1-5", "6-25", "26-100", "100-500", "500-1000", "More than 1000"], label_visibility="collapsed")
+no_employees = st.radio("5", ["1-5", "6-25", "26-100", "100-500", "500-1000", "Plus de 1000"], label_visibility="collapsed")
 
 st.write("##")
 
@@ -158,8 +159,19 @@ if bouton:
     "mental_vs_physical" : mental_vs_physical, 
     "obs_consequence" : obs_consequence}
 
-    # response = app.post("/predict", json=input_data_dict)
-    # response = requests.post("https://api-isen-g2-06ad6589f9a4.herokuapp.com/predict_loan", json=dict_pred)
-    # st.text(response.json()["prediction"])
+
+    for key, value in dict_pred.items():
+        value = translate(value)
+        dict_pred[key] = value
+
+
+    response = requests.post("http://127.0.0.1:8000/predict", json=dict_pred)
+    reponse = response.json()["prediction"]
+    if reponse=="Yes":
+        texte = "Vous devriez aller vous faire soigner"
+    elif reponse=="No":
+        texte = "Vous êtes en bonne santé mentale"
+
+    st.text(texte)
 
 
