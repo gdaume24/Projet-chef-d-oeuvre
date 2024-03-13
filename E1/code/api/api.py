@@ -1,12 +1,38 @@
 from fastapi import FastAPI
 import pandas as pd
 from pydantic import BaseModel
+from translation import translate
+import sqlite3
 import pickle
 import os
 
+dict_example = {
+    "Age" : 25,
+    "Gender" : "Homme",
+    "self_employed" : "Oui",
+    "family_history" : "Oui",
+    "work_interfere" : "Souvent",
+    "no_employees" : '1-5',
+    "remote_work" : "Oui",
+    "tech_company" : "Oui",
+    "benefits" : "Oui",
+    "care_options" : "Oui",
+    "wellness_program" : "Oui",
+    "seek_help" : "Oui",
+    "anonymity" : "Oui",
+    "leave" : "Très facilement",
+    "mental_health_consequence" : "Oui",
+    "phys_health_consequence" : "Oui",
+    "coworkers" : "Oui",
+    "supervisor" : "Oui",
+    "mental_health_interview" : "Oui",
+    "phys_health_interview" : "Oui",
+    "mental_vs_physical" : "Oui",
+    "obs_consequence" : "Oui"
+}
 
 def charger_model():
-    model_path = r"pipeline_logisticregression0.83f1.pkl"
+    model_path = r"/home/geoffroy/Projets/Rendus_Ecole_Simplon/PCO/E1/code/api/pipeline_logisticregression0.83f1.pkl"
     model = pickle.load(open(model_path, "rb"))
     return model
 
@@ -45,9 +71,35 @@ def home():
  
 @app.post("/predict")
 def predict(input_data: Issick):
-    input_data_dict = dict(input_data)
-    input_df = pd.DataFrame(input_data_dict, index=[0])
+    dict_pred_fr = dict(input_data)
+
+    # Traduction du dictionnaire en anglais pour la prédiction
+    dict_pred_en = dict_pred_fr.copy()
+    for key, value in dict_pred_en.items():
+        value = translate(value)
+        dict_pred_en[key] = value
+
+    # Prédiction
+    input_df = pd.DataFrame(dict_pred_en, index=[0])
     prediction = model.predict(input_df)[0]
+
+    # Insertion des données en base sqlite
+    # Complétion du dictionnaire avec le résultat
+    if prediction == "Yes":
+        id_reponse = 1
+    elif prediction == "No":
+        id_reponse = 2
+
+    dict_pred_fr["id_reponse"] = id_reponse
+
+    # Entrée du questionnaire complet en base
+    conn = sqlite3.connect("/home/geoffroy/Projets/Rendus_Ecole_Simplon/PCO/E1/code/bdd_sqlite_predictions/predictions.db")
+    cursor = conn.cursor()
+    request = f"""INSERT INTO questionnaire {tuple(dict_pred_fr.keys())}
+    VALUES {tuple(dict_pred_fr.values())}"""
+    cursor.execute(request)
+    conn.commit()
+    conn.close()
 
     return {"prediction" : prediction}
 

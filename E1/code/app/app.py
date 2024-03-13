@@ -1,6 +1,5 @@
 import streamlit as st
 import requests
-from translation import translate
 
 st.title("Détection de besoin de traitement pour la santé mentale avec l'IA")
 
@@ -136,7 +135,7 @@ obs_consequence = st.radio("21", ["Oui", "Non"], label_visibility="collapsed")
 # Bouton prédiction
 bouton = st.button("Lancer la prédiction")
 if bouton:
-    dict_pred = {"Age" : Age,
+    dict_pred_fr = {"Age" : Age,
     "Gender" : Gender,
     "self_employed" : self_employed,
     "family_history" : family_history,
@@ -160,12 +159,7 @@ if bouton:
     "obs_consequence" : obs_consequence}
 
 
-    for key, value in dict_pred.items():
-        value = translate(value)
-        dict_pred[key] = value
-
-
-    response = requests.post("http://127.0.0.1:8000/predict", json=dict_pred)
+    response = requests.post("http://127.0.0.1:8000/predict", json=dict_pred_fr)
     reponse = response.json()["prediction"]
     if reponse=="Yes":
         texte = "Vous devriez aller vous faire soigner"
