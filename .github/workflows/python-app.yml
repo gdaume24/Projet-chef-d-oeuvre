@@ -30,4 +30,5 @@ jobs:
         pip install -r requirements.txt
     - name: Execute test
       run: |
+        cd E1/code/api
         pytest
