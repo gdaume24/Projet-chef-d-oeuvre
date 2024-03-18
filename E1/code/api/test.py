@@ -3,8 +3,10 @@ from pydantic import BaseModel
 import pickle
 import sqlite3
 import pandas as pd
+import os
+import sqlite3
 
-dict_example = {
+ex = {
     "Age" : 25,
     "Gender" : "Homme",
     "self_employed" : "Oui",
@@ -28,33 +30,5 @@ dict_example = {
     "mental_vs_physical" : "Oui",
     "obs_consequence" : "Oui"
 }
-
-class Issick(BaseModel):
-    Age : int
-    Gender : str
-    self_employed : str
-    family_history : str
-    work_interfere : str
-    no_employees : str
-    remote_work : str
-    tech_company : str
-    benefits : str
-    care_options : str
-    wellness_program : str
-    seek_help : str
-    anonymity : str
-    leave : str
-    mental_health_consequence : str
-    phys_health_consequence : str
-    coworkers : str
-    supervisor : str
-    mental_health_interview : str
-    phys_health_interview : str
-    mental_vs_physical : str
-    obs_consequence : str
-
-def predict(input_data: Issick):
-    print(type(input_data))
-    print(input_data)
-
-di = predict(dict_example)
+ 
+eval(str(ex))

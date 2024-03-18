@@ -171,4 +171,3 @@ if bouton:
         texte = "Vous êtes en bonne santé mentale"
 
     st.text(texte)
-    print(reponse)

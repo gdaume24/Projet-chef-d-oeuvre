@@ -5,11 +5,21 @@ from translation import translate
 import sqlite3
 import pickle
 import uvicorn
+import asyncio
+import logging
 import os
+logging.basicConfig(level=logging.WARNING)
+
+# Chemin dossier
+chemin = os.path.realpath(
+    os.path.join(os.getcwd(), os.path.dirname(__file__)))
+# Chemin modèle
+chemin_modele = os.path.join(chemin, "pipeline_logisticregression0.83f1.pkl")
+# Chemin bdd prédictions
+chemin_dossier_racine = os.path.dirname(chemin)
+chemin_bdd_predictions = os.path.join(chemin_dossier_racine, "bdd_sqlite_predictions", "predictions.db")
 
 app = FastAPI()
-
-relative_path_bdd = "../bdd_sqlite_predictions/predictions.db"
 
 dict_example = {
     "Age" : 25,
@@ -37,8 +47,7 @@ dict_example = {
 }
 
 def charger_model():
-    model_path = r"pipeline_logisticregression0.83f1.pkl"
-    model = pickle.load(open(model_path, "rb"))
+    model = pickle.load(open(chemin_modele, "rb"))
     return model
 
 # class Issick(BaseModel):
@@ -73,8 +82,8 @@ def home():
  
 @app.post("/predict")
 def predict(input_data):
-    print(type(input_data))
     print(input_data)
+
     dict_pred_fr = eval(input_data)
 
     # Traduction du dictionnaire en anglais pour la prédiction
@@ -97,7 +106,7 @@ def predict(input_data):
     dict_pred_fr["id_reponse"] = id_reponse
 
     # Entrée du questionnaire complet en base
-    conn = sqlite3.connect(relative_path_bdd)
+    conn = sqlite3.connect(chemin_bdd_predictions)
     cursor = conn.cursor()
     request = f"""INSERT INTO questionnaire {tuple(dict_pred_fr.keys())}
     VALUES {tuple(dict_pred_fr.values())}"""
@@ -107,7 +116,20 @@ def predict(input_data):
 
     return {"prediction" : prediction}
 
+def start_api(loop):
+    # uvicorn.run(app, host="127.0.0.1", port=8000)
+    config = uvicorn.Config(app, loop=loop)
+    server = uvicorn.Server(config)
+    loop.run_until_complete(server.serve())
+
+def start_tracking():
+    loop.create_task(track.go())
 
 # For debugging with breakpoints in VS Code
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
+    # Lancer l'API dans un processus séparé
+    # loop = asyncio.new_event_loop()
+    # asyncio.set_event_loop(loop)
+    # start_api(loop)
+    # start_tracking(loop)
