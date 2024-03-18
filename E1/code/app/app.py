@@ -1,5 +1,7 @@
 import streamlit as st
+import sys
 import requests
+from streamlit.web import cli as stcli
 
 st.title("Détection de besoin de traitement pour la santé mentale avec l'IA")
 
@@ -158,8 +160,10 @@ if bouton:
     "mental_vs_physical" : mental_vs_physical, 
     "obs_consequence" : obs_consequence}
 
+    # Je mets le dictionnaire en string parce que l'api attends une string
+    dict_pred_fr = str(dict_pred_fr)
 
-    response = requests.post("http://127.0.0.1:8000/predict", json=dict_pred_fr)
+    response = requests.post("http://127.0.0.1:8000/predict", params={"input_data":dict_pred_fr})
     reponse = response.json()["prediction"]
     if reponse=="Yes":
         texte = "Vous devriez aller vous faire soigner"
@@ -167,5 +171,4 @@ if bouton:
         texte = "Vous êtes en bonne santé mentale"
 
     st.text(texte)
-
-
+    print(reponse)
