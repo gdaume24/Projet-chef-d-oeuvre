@@ -1,35 +1,26 @@
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+import smtplib, ssl
+from dotenv import load_dotenv
+import os
 
-def send_email(sender_email, receiver_email, subject, body, smtp_server, smtp_port, smtp_username, smtp_password):
-    # Création de l'e-mail
-    message = MIMEMultipart()
-    message['From'] = sender_email
-    message['To'] = receiver_email
-    message['Subject'] = subject
+load_dotenv()
 
-    # Corps du message
-    message.attach(MIMEText(body, 'plain'))
 
-    # Connexion au serveur SMTP et envoi de l'e-mail
-    with smtplib.SMTP(smtp_server, smtp_port) as server:
-        server.starttls()
-        server.login(smtp_username, smtp_password)
-        server.sendmail(sender_email, receiver_email, message.as_string())
+def send_email(message):
+    # on rentre les renseignements pris sur le site du fournisseur
+    smtp_address = 'smtp.gmail.com'
+    smtp_port = 465
 
-if __name__ == "__main__":
-    # Configurations SMTP
-    smtp_server = 'smtp.example.com'  # Adresse du serveur SMTP
-    smtp_port = 587  # Port SMTP
-    smtp_username = 'your_smtp_username'  # Nom d'utilisateur SMTP
-    smtp_password = 'your_smtp_password'  # Mot de passe SMTP
+    # on rentre les informations sur notre adresse e-mail
+    email_address = 'geoffroy.daumer@gmail.com'
 
-    # Informations de l'e-mail
-    sender_email = 'geoffroy.daumer@outlook.com'  # Adresse e-mail de l'expéditeur
-    receiver_email = 'kirbycath61'  # Adresse e-mail du destinataire
-    subject = 'Sujet de l\'e-mail'  # Sujet de l'e-mail
-    body = 'Contenu du message.'  # Corps de l'e-mail
+    # on rentre les informations sur le destinataire
+    email_receiver = 'geoffroy.daumer@gmail.com'
 
-    # Envoi de l'e-mail
-    send_email(sender_email, receiver_email, subject, body, smtp_server, smtp_port, smtp_username, smtp_password)
+    # on crée la connexion
+    context = ssl.create_default_context()
+
+    with smtplib.SMTP_SSL(smtp_address, smtp_port, context=context) as server:
+        # connexion au compte
+        server.login(email_address, os.environ["CLEF"])
+        # envoi du mail
+        server.sendmail(email_address, email_receiver, message)

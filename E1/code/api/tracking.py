@@ -2,6 +2,7 @@ import requests
 import time
 import sqlite3
 from tkinter import *
+from send_email import send_email
 import os
 
 # Chemin dossier
@@ -36,6 +37,7 @@ dict_pred_fr = {
     "mental_vs_physical" : "Oui",
     "obs_consequence" : "Oui"
 }
+
 requests.packages.urllib3.disable_warnings()
 def track():
     while True:
@@ -58,9 +60,11 @@ def track():
 
         except Exception as e:
             # En cas d'erreur lors de la requête
-            print("Erreur lors de la requête à l'API:", e)
+            print(repr(e))
+            if "CLEF" in os.environ:
+                send_email(repr(e))
 
-        # # Attendre 5 secondes avant d'effectuer la prochaine requête
+        # # Attendre 4 secondes avant d'effectuer la prochaine requête
         time.sleep(4)
 
 track()
