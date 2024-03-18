@@ -1,28 +1,30 @@
 from fastapi.testclient import TestClient
 from api import app
 
-input_data_dict = {"Age" : "35",
-"Gender" : "Female",
-"self_employed" : "Other",
-"family_history" : "No",
-"work_interfere" : "Not concerned",
-"no_employees" : "More than 1000",
-"remote_work" : "Yes", 
-"tech_company" : "Yes",
-"benefits" : "Yes", 
-"care_options" : "Not sure", 
-"wellness_program" : "No", 
-"seek_help" : "Yes",
-"anonymity" : "Yes", 
-"leave" : "Somewhat easy", 
-"mental_health_consequence" : "No",
-"phys_health_consequence" : "No", 
-"coworkers" : "Some of them", 
-"supervisor" : "Yes",
-"mental_health_interview" : "No", 
-"phys_health_interview" : "Maybe",
-"mental_vs_physical" : "Don't know", 
-"obs_consequence" : "No"}
+input_data_dict = {
+    "Age" : 55,
+    "Gender" : "Femme",
+    "self_employed" : "Non",
+    "family_history" : "Non",
+    "work_interfere" : "Souvent",
+    "no_employees" : '1-5',
+    "remote_work" : "Non",
+    "tech_company" : "Non",
+    "benefits" : "Non",
+    "care_options" : "Non",
+    "wellness_program" : "Non",
+    "seek_help" : "Oui",
+    "anonymity" : "Oui",
+    "leave" : "Très facilement",
+    "mental_health_consequence" : "Oui",
+    "phys_health_consequence" : "Oui",
+    "coworkers" : "Oui",
+    "supervisor" : "Oui",
+    "mental_health_interview" : "Oui",
+    "phys_health_interview" : "Oui",
+    "mental_vs_physical" : "Oui",
+    "obs_consequence" : "Oui"
+}
 
 client = TestClient(app)
 
@@ -33,6 +35,6 @@ def test_home():
 
 
 def test_prediction():
-    response = client.post("/predict", json=input_data_dict)
+    response = client.post("/predict", params={"input_data":input_data_dict})
     assert response.status_code == 200 
-    assert response.json() == {"prediction": "No"}
+    assert response.json() == {"prediction": "Yes"}
