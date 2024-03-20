@@ -166,8 +166,8 @@ if bouton:
     response = requests.post("http://127.0.0.1:8000/predict", params={"input_data":dict_pred_fr})
     reponse = response.json()["prediction"]
     if reponse=="Yes":
-        texte = "Vous devriez aller vous faire soigner"
+        texte = "Vous devriez considérer le fait de prendre un traitement ou de chercher de l'aide."
     elif reponse=="No":
-        texte = "Vous êtes en bonne santé mentale"
+        texte = "Vous êtes en bonne santé mentale."
 
     st.text(texte)

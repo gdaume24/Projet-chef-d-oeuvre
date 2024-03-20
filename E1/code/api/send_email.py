@@ -4,7 +4,6 @@ import os
 
 load_dotenv()
 
-
 def send_email(message):
     # on rentre les renseignements pris sur le site du fournisseur
     smtp_address = 'smtp.gmail.com'
