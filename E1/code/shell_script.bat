@@ -12,3 +12,4 @@ rem Lancer appli
 cd ../app
 call venv_app\Scripts\activate.bat
 start cmd /k "streamlit run app.py "
+
