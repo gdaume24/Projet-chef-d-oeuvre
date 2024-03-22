@@ -1,2 +1,2 @@
-Relation entre les tables donc BDD relationnelle, MySQL pour fonctionner avec Heroku
+Relation entre les tables donc BDD relationnelle
 

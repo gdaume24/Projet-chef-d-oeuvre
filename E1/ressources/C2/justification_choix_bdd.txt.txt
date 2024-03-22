@@ -10,7 +10,7 @@ Ajout du chemin du dossier dans ma variable d'environnement PATH
 Test de lancement de l'application dans le terminal
 
 Création d'une database SQLite en python :
-engine = create_engine('sqlite:///db.db', echo=False)
+con = sqlite3.connect("db.db")
 
 Import du jeu de données : 
  - Chargement du fichier csv en jeu de données

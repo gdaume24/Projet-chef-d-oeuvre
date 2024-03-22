@@ -8,7 +8,7 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 data_path = os.path.join(parentdir, "data/survey.csv")
-from stratégie_nettoyage_donnees import nettoyage_df
+from EDA.stratégie_nettoyage_donnees import nettoyage_df
 
 con = sqlite3.connect("db.db")
 

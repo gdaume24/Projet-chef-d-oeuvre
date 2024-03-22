@@ -43,7 +43,6 @@ def track():
     while True:
         try:
             # Effectuer la requête à l'API
-            # requests.get("http://localhost:8000/")
             response = requests.post("http://localhost:8000/predict", params={"input_data":str(dict_pred_fr)})
 
             # Suppresion automatique de la valeur insérée en bdd
